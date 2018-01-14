@@ -3,18 +3,21 @@ import scrapy
 
 from scrapy.http import Request
 
+
 class DownloadHumblebundle(scrapy.Spider):
 	name = 'download_humblebundle'
 	# domain URL
 	allowed_domains = ['www.humblebundle.com']
 	# links to the specific pages
 	start_urls = ['https://www.humblebundle.com/downloads?key={}'.format(os.environ.get('KEY'))]
-	print(start_urls)
 
+	def start_requests(self):
+		for url in self.start_urls:
+			yield Request(url, self.parse)
 
 	def parse(self, response):
 		# selector of pdf file.
-		selector = 'download a::attr(href)'
+		selector = '.download a::attr(href)'
 		for href in response.css(selector).extract():
 			yield Request(
 				url=response.urljoin(href),

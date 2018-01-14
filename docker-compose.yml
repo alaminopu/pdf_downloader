@@ -3,9 +3,13 @@ services:
   download:
     build: .
     command: bash -c "cd /app/ && scrapy runspider pdf_downloader.py"
+    volumes:
+      - ./pdf_downloader.py:/app/pdf_downloader.py
 
   download_humblebundle:
     build: .
     command: bash -c "cd /app/ && scrapy runspider download_humblebundle.py"
+    volumes:
+      - ./download_humblebundle.py:/app/download_humblebundle.py
     environment:
-      - KEY=6AS5HeVNvSsnPKSf
+      - KEY=
