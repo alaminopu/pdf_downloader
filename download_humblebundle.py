@@ -1,18 +1,20 @@
+import os
 import scrapy
 
 from scrapy.http import Request
 
-class PdfDownloader(scrapy.Spider):
-	name = 'pdf_downloader'
+class DownloadHumblebundle(scrapy.Spider):
+	name = 'download_humblebundle'
 	# domain URL
-	allowed_domains = ['example.com']
+	allowed_domains = ['www.humblebundle.com']
 	# links to the specific pages
-	start_urls = ['http://example.com/slides/']
+	start_urls = ['https://www.humblebundle.com/downloads?key={}'.format(os.environ.get('KEY'))]
+	print(start_urls)
 
 
 	def parse(self, response):
 		# selector of pdf file.
-		selector = 'table tr td a[href$=".pdf"]::attr(href)'
+		selector = 'download a::attr(href)'
 		for href in response.css(selector).extract():
 			yield Request(
 				url=response.urljoin(href),
